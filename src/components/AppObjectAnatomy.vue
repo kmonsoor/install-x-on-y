@@ -1,14 +1,14 @@
 <template>
-  <div class="more-info-contain">
-    <svg 
-      @mouseenter="show = !show" 
-      @mouseleave="show = !show"
-      xmlns="http://www.w3.org/2000/svg" 
-      viewBox="0 0 6.827 6.827" 
-      width="60" height="60"
-      aria-labelledby="skeletonicon"
-      role="presentation">
-      <title id="skeletonicon" lang="en">skeleton icon</title>
+    <div class="more-info-contain">
+        <svg
+                @mouseenter="show = !show"
+                @mouseleave="show = !show"
+                aria-labelledby="skeletonicon"
+                height="60"
+                role="presentation" viewBox="0 0 6.827 6.827"
+                width="60"
+                xmlns="http://www.w3.org/2000/svg">
+            <title id="skeletonicon" lang="en">skeleton icon</title>
       <g class="skeleton">
         <rect x="0" y="0" width="6.8" height="6.8" fill="rgba(255, 255, 255, 0)"/>
         <path d="M.907.853h5.066v5.12H.853V.853h.054zm4.96.107H.96v4.907h4.907V.96z" class="fil0"/>
@@ -34,64 +34,65 @@
       </div>
     </transition>
   </div>
+
 </template>
 
 <script>
-import AppAnatomyDiagram from './AppAnatomyDiagram.vue'
+    import AppAnatomyDiagram from './AppAnatomyDiagram.vue'
 
-export default {
-  components: {
-    AppAnatomyDiagram
-  },
-  data() {
-    return {
-      show: false
+    export default {
+        components: {
+            AppAnatomyDiagram
+        },
+        data() {
+            return {
+                show: false
+            }
+        }
     }
-  }
-}
 </script>
 
 <style scoped>
-.findoutmore {
-  position: absolute;
-  bottom: 7px;
-  left: 60px;
-  z-index: 4000;
-}
+    .findoutmore {
+        position: absolute;
+        bottom: 7px;
+        left: 60px;
+        z-index: 4000;
+    }
 
-.appear-enter-active,
-.appear-leave-active {
-  transition: opacity 0.25s ease;
-}
+    .appear-enter-active,
+    .appear-leave-active {
+        transition: opacity 0.25s ease;
+    }
 
-.appear-enter,
-.appear-leave-to {
-  opacity: 0;
-}
+    .appear-enter,
+    .appear-leave-to {
+        opacity: 0;
+    }
 
-.more-info-contain {
-  position: absolute;
-  bottom: 40px;
-  left: 30px;
-}
+    .more-info-contain {
+        position: absolute;
+        bottom: 40px;
+        left: 30px;
+    }
 
-.more-info {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 35px;
-  height: 35px;
-  cursor: pointer;
-}
+    .more-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 35px;
+        height: 35px;
+        cursor: pointer;
+    }
 
-.skeleton {
-  fill: #aaa;
-  transition: 0.15s all ease-in;
-  cursor: pointer;
-}
+    .skeleton {
+        fill: #aaa;
+        transition: 0.15s all ease-in;
+        cursor: pointer;
+    }
 
-.skeleton:hover {
-  fill: #333;
-  transition: 0.25s all ease-out;
-}
+    .skeleton:hover {
+        fill: #333;
+        transition: 0.25s all ease-out;
+    }
 </style>
