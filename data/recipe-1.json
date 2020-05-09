@@ -1,0 +1,46 @@
+{
+  "os": {
+    "name": "macOS",
+    "version": "10.14.6",
+    "version_name": "Mojave"
+  },
+  "app": {
+    "name": "python3",
+    "version": ">=3.6.0"
+  },
+  "action": "install",
+  "recipes": [
+    {
+      "method": "Brew",
+      "recipe": [
+        {
+          "text": "Check if X-code is installed",
+          "command": "xcode-select --version"
+        },
+        {
+          "text": "Check if currently Python 2 is the default Python on the system. You might see Python 2.7.*",
+          "command": "python --version"
+        },
+        {
+          "text": "If you have [Brew](https://docs.brew.sh/Installation) installed, run this:",
+          "command": "brew update && brew upgrade python"
+        },
+        {
+          "text": "Check the version of the newly installed Python. You should see Python 3.*",
+          "command": "python --version"
+        },
+        {
+          "text": "Now, possibly you want to alias to the copy of Python3 that Homebrew managing in your shell",
+          "case1": {
+            "text": "If you use the default shell, update your `.bashrc` file",
+            "command": "echo \"alias python=/usr/local/bin/python3.7\" >> ~/.bashrc"
+          },
+          "case2": {
+            "text": "otherwise, if you're using ZSH, update your `.zshrc` file",
+            "command": "echo \"alias python=/usr/local/bin/python3.7\" >> ~/.zshrc"
+          }
+        }
+      ]
+    }
+  ]
+}
