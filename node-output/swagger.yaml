@@ -93,12 +93,7 @@
           "style" : "form",
           "explode" : true,
           "schema" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string",
-              "default" : "available",
-              "enum" : [ "available", "pending", "sold" ]
-            }
+            "type" : "string"
           }
         } ],
         "responses" : {
@@ -128,7 +123,55 @@
           }
         },
         "security" : [ {
-          "appstore_auth" : [ "write:apps", "read:apps" ]
+          "appstore_auth" : [ "read:apps" ]
+        } ]
+      }
+    },
+    "/app/{osId}" : {
+      "get" : {
+        "summary" : "Finds apps by OS ID",
+        "description" : "Finds all the apps available for an OS",
+        "operationId" : "findAppsByOsId",
+        "parameters" : [ {
+          "name" : "osId",
+          "in" : "path",
+          "description" : "OS ID value that need to be considered for filter",
+          "required" : true,
+          "style" : "simple",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/App"
+                  }
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/App"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid status value"
+          }
+        },
+        "security" : [ {
+          "appstore_auth" : [ "read:apps" ]
         } ]
       }
     },
@@ -248,10 +291,10 @@
     },
     "/ixoy" : {
       "post" : {
-        "summary" : "Place an ixoy for a app",
-        "operationId" : "placeIxoy",
+        "summary" : "Add an ixoy for a app",
+        "operationId" : "addIxoy",
         "requestBody" : {
-          "description" : "ixoy placed for purchasing the app",
+          "description" : "ixoy added for the (app, OS)",
           "content" : {
             "application/json" : {
               "schema" : {
@@ -296,8 +339,6 @@
           "style" : "simple",
           "explode" : false,
           "schema" : {
-            "maximum" : 10,
-            "minimum" : 1,
             "type" : "integer",
             "format" : "int64"
           }
@@ -338,7 +379,6 @@
           "style" : "simple",
           "explode" : false,
           "schema" : {
-            "minimum" : 1,
             "type" : "integer",
             "format" : "int64"
           }
@@ -356,7 +396,7 @@
     "/os" : {
       "post" : {
         "summary" : "Create os",
-        "description" : "This can only be done by the logged in os.",
+        "description" : "This can only be done by the logged in.",
         "operationId" : "createOs",
         "requestBody" : {
           "description" : "Created os object",
@@ -386,6 +426,105 @@
         "responses" : {
           "default" : {
             "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/os/{osId}" : {
+      "get" : {
+        "summary" : "Get os by os name",
+        "operationId" : "getOsById",
+        "parameters" : [ {
+          "name" : "osId",
+          "in" : "path",
+          "description" : "The ID of the OS that needs to be fetched.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Os"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Os"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid osname supplied"
+          },
+          "404" : {
+            "description" : "OS not found"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Updated os",
+        "description" : "This can only be done by the logged in os.",
+        "operationId" : "updateOs",
+        "parameters" : [ {
+          "name" : "osId",
+          "in" : "path",
+          "description" : "name that need to be updated",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Updated os object",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Os"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "400" : {
+            "description" : "Invalid os supplied"
+          },
+          "404" : {
+            "description" : "Os not found"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Delete os",
+        "description" : "This can only be done by the logged in os.",
+        "operationId" : "deleteOsById",
+        "parameters" : [ {
+          "name" : "osId",
+          "in" : "path",
+          "description" : "The name that needs to be deleted",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Invalid osname supplied"
+          },
+          "404" : {
+            "description" : "Os not found"
           }
         }
       }
@@ -429,45 +568,10 @@
           }
         }
       },
-      "put" : {
-        "summary" : "Updated os",
-        "description" : "This can only be done by the logged in os.",
-        "operationId" : "updateOs",
-        "parameters" : [ {
-          "name" : "osname",
-          "in" : "path",
-          "description" : "name that need to be updated",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "requestBody" : {
-          "description" : "Updated os object",
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/Os"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "400" : {
-            "description" : "Invalid os supplied"
-          },
-          "404" : {
-            "description" : "Os not found"
-          }
-        }
-      },
       "delete" : {
         "summary" : "Delete os",
         "description" : "This can only be done by the logged in os.",
-        "operationId" : "deleteOs",
+        "operationId" : "deleteOsByName",
         "parameters" : [ {
           "name" : "osname",
           "in" : "path",
@@ -503,18 +607,30 @@
             "type" : "integer",
             "format" : "int64"
           },
-          "quantity" : {
-            "type" : "integer",
-            "format" : "int32"
+          "appVersion" : {
+            "type" : "string",
+            "description" : "app version"
           },
-          "shipDate" : {
+          "osId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "osVersion" : {
+            "type" : "string",
+            "description" : "os version"
+          },
+          "dateAdded" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "dateLastUpdated" : {
             "type" : "string",
             "format" : "date-time"
           },
           "status" : {
             "type" : "string",
             "description" : "Ixoy Status",
-            "enum" : [ "placed", "approved", "delivered" ]
+            "enum" : [ "added", "rejected", "verified", "approved" ]
           },
           "complete" : {
             "type" : "boolean",
@@ -528,32 +644,18 @@
       "Os" : {
         "type" : "object",
         "properties" : {
-          "id" : {
+          "osId" : {
             "type" : "integer",
             "format" : "int64"
           },
-          "osname" : {
+          "osName" : {
             "type" : "string"
           },
-          "firstName" : {
-            "type" : "string"
-          },
-          "lastName" : {
-            "type" : "string"
-          },
-          "email" : {
-            "type" : "string"
-          },
-          "password" : {
-            "type" : "string"
-          },
-          "phone" : {
-            "type" : "string"
-          },
-          "osStatus" : {
-            "type" : "integer",
-            "description" : "Os Status",
-            "format" : "int32"
+          "sys_platforms" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
           }
         },
         "xml" : {
